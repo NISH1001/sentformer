@@ -25,6 +25,35 @@ embeddings = sentformer.encode(sentences)
 print(embeddings.shape)
 ```
 
+```
+torch.Size([3, 768])
+
+tensor([[ 0.5344,  0.3247, -0.1033,  ..., -0.0295,  0.2302,  0.2154],
+        [ 0.2443,  0.2077, -0.2987,  ...,  0.1340,  0.0335, -0.0820],
+        [ 0.0744, -0.1423,  0.2127,  ..., -0.4782,  0.1212,  0.1719]])
+```
+
+embeddings similarities:
+```python
+from sentform.utils import pairwise_cosine_similarity
+import seaborn as sns
+import matplotlib.pyplt as plt
+
+sims = pairwise_cosine_similarity(embeddings)
+
+sns.heatmap(
+    sims,
+    annot=True,
+    cmap="coolwarm",
+    cbar=True,
+    square=True,
+    xticklabels=sentences,
+    yticklabels=sentences,
+)
+```
+
+![image](https://github.com/user-attachments/assets/f52669e9-4d06-47d8-9f68-2bff14b84466)
+
 
 
 > Note: tokenizer are automatically initialized based on the backbone type. We can also access `SentenceTransformer.tokenize(...)` method for only tokenization.
@@ -80,8 +109,84 @@ multi_tasker = MultiTaskFormer(
 )
 
 outputs = multi_tasker(sentences)
-print(outputs["head_0"])
-print(outputs["head_1"])
+print(outputs)
+# print(outputs["head_0"])
+# print(outputs["head_1"])
+```
+
+```python
+{'head_0': {'logits': tensor([[-0.0638, -0.1983,  0.0074],
+          [ 0.0208,  0.1266,  0.2032],
+          [-0.0508,  0.1157,  0.0638]]),
+  'predicted_labels': [['Negative'],
+   ['Positive', 'Neutral', 'Negative'],
+   ['Neutral', 'Negative']]},
+ 'head_1': {'logits': tensor([[[-0.3314, -0.5311,  0.1053],
+           [-0.2897, -0.6716,  0.2112],
+           [-0.1475, -0.8265, -0.1555],
+           [ 0.1923, -0.0331,  0.1125],
+           [-0.6644, -0.6219, -0.0615],
+           [-0.2435,  0.4752, -0.0369],
+           [-0.0547, -0.5965, -0.1171],
+           [-0.0953, -0.5887, -0.1721],
+           [ 0.0295, -0.5246, -0.1318],
+           [-0.1297, -0.5958, -0.2530],
+           [-0.0790, -0.5677, -0.1527],
+           [-0.0513, -0.5438, -0.0992]],
+  
+          [[-0.3009, -0.4976,  0.1998],
+           [-0.2441, -0.5311,  0.2400],
+           [-0.3107, -0.2357, -0.3953],
+           [-0.2541,  0.2635,  0.0801],
+           [-0.1912, -0.3858, -0.3256],
+           [-0.0159, -0.2862, -0.0302],
+           [-0.3075, -0.0702,  0.3962],
+           [-0.2758,  0.1982,  0.1446],
+           [-0.4386, -0.3423, -0.0923],
+           [-0.1159,  0.0474, -0.0023],
+           [-0.1556, -0.5621, -0.0545],
+           [-0.2751, -0.7029, -0.1213]],
+  
+          [[-0.3553, -0.4153,  0.2557],
+           [-0.5644, -0.2095,  0.1845],
+           [-0.5335, -0.1052,  0.2065],
+           [-0.3325, -0.0078, -0.1156],
+           [-0.5451, -0.2389,  0.2108],
+           [-0.1052, -0.0777, -0.4317],
+           [-0.0275, -0.4303,  0.0639],
+           [-0.4370, -0.3666,  0.2235],
+           [-0.0432, -0.1246, -0.3537],
+           [-0.7474, -0.3369,  0.0270],
+           [-0.3570,  0.3229, -0.0076],
+           [-0.0948,  0.2846,  0.1393]]]),
+  'predicted_labels': [['Location',
+    'Location',
+    'Person',
+    'Person',
+    'Location',
+    'Organization'],
+   ['Location',
+    'Location',
+    'Organization',
+    'Organization',
+    'Person',
+    'Person',
+    'Location',
+    'Organization',
+    'Location',
+    'Organization'],
+   ['Location',
+    'Location',
+    'Location',
+    'Organization',
+    'Location',
+    'Organization',
+    'Location',
+    'Location',
+    'Person',
+    'Location',
+    'Organization',
+    'Organization']]}}
 ```
 
 > Note: Since no training mechanism is implemented, the multi_tasker output in the code snippet and the adjoined notebook will output random things because the downstream heads aren't trained.
