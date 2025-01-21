@@ -1,4 +1,4 @@
-Please refer to `notebooks/test.ipynb` notebook for some implementation tests.
+Please refer to `notebooks/test-sentence-transformers.ipynb` notebook for some implementation tests.
 
 # Step-1
 
@@ -52,7 +52,7 @@ There can be a lot of ways to add more complexity to generate the embeddings suc
 
 We implement `sentform.modeling.MultiTaskFormer` which is an extension to `SentenceTransformer` that allows to add any downstream heads `sentform.heads.NetworkHead` for any downtream tasks. We implement two such heads:
 
-- `sentform.heads.ClassificationHead` for general multi-class and multi-label classification, working at sequence-level classification. 
+- `sentform.heads.ClassificationHead` for general multi-class and multi-label classification, working at sequence-level classification.
 - `sentform.heads.NERHead`, an extension to the `ClassificationHead` which works at token-level classification.
 
 ```python
@@ -100,7 +100,7 @@ The architecture changes here are addition of the downtream heads which are iter
 
 **When to freeze the backbone?**
 
-Freezing is effective when we are dealing with pre-trained models (easily available, open sourced) and we are limited in data for fine-tuning. Backbone exhibiting a superset of the task abstraction would be beneficial directly as it would have already learnt a lot of text representation internally and there's less need to train the backbone as well. General rule of thumb is: 
+Freezing is effective when we are dealing with pre-trained models (easily available, open sourced) and we are limited in data for fine-tuning. Backbone exhibiting a superset of the task abstraction would be beneficial directly as it would have already learnt a lot of text representation internally and there's less need to train the backbone as well. General rule of thumb is:
 
 - Backbone is highly capable in meaningful internal representation of the language (same)
 - We are limited in data size (few dozens or maybe few hundreds of samples)
